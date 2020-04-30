@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+<head><meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+    <title>PyGame Basics</title>
+    <link href="assets/css/style.css" rel="stylesheet">
+    <link href="assets/css/responsive.css" rel="stylesheet">
+  </head>
+<body>
+  <div class="navbar" id="topNav">
+    <a href="https://arynchoong.com" style="padding:0;"><img src="assets/images/aryn-straight.png"></a>
+    <a href="index.html">PyGame</a>
+    <div class="dropdown">
+      <button class="dropbtn" onclick="addDrop()">&#9662;</button>
+      <div class="dropdown-content">
+        <a href="pg01_events.html">Events</a>
+        <a href="pg02_display_text.html">Text</a>
+        <a class="active">Animate</a>
+      </div>
+    </div>
+    <a href="javascript:void(0);" class="icon" onclick="addDrop()">&#9776;</a>
+  </div>
+    
+  <div class="page">
+    <article>
+      <h1>PyGame Basics</h1>
+      <h2>Animate graphic object</h2>
+      
+      <div class="flex-container">
+        <div class="box">
+          <p>Now that we have our main loop, let us create our inner game play loop:</p>
+        </div>
+        <div class="boxes">
+          <code class="python">
+            <pre>class Game():
+    def __init__(self):
+        pygame.init() # initialises Pygame libraries
+        self.display = pygame.display.set_mode((WIDTH, HEIGHT))
+        self.disp_surf = self.init_display()
+        self.size = WIDTH, HEIGHT
+        self.running = True if self.disp_surf else False
+        self.state = START
+        self.font = pygame.font.Font(pygame.font.get_default_font(), 36)
+<div class="diff">        self.ball = pygame.image.load("ball.png")
+        self.ballrect = self.ball.get_rect()
+        self.speed = [2, 2]
+</div>        return
+ . 
+ . 
+ . 
+    def execute(self):
+        # Event loop
+        while self.running:
+            self.check_events()
+<div class="diff">            if self.state == PLAYING:
+                self.render_play()
+            else:
+                self.render()
+</div>        return</pre>
+          </code>
+        </div>
+      </div>
+
+      <div class="flex-container">
+        <div class="box">
+          <p>Let's create <code>render_play()</code>.</p>
+          <p>Here we want to animate our beach ball.</p>
+        </div>
+        <div class="boxes">
+          <code class="python">
+            <pre><div class="diff">    def render_play(self):
+        '''Render surface'''
+        self.disp_surf.fill(BLACK)
+        self.display.blit(self.disp_surf, (0,0))
+
+        # setup ball
+        self.ballrect = self.ballrect.move(self.speed)
+        self.display.blit(self.ball, self.ballrect)
+
+        # update display
+        pygame.display.flip()
+
+        # update speed
+        if self.ballrect.left < 0 or self.ballrect.right > WIDTH:
+            self.speed[0] = -self.speed[0]
+        if self.ballrect.top < 0 or self.ballrect.bottom > HEIGHT:
+            self.speed[1] = -self.speed[1]
+        return
+</div></pre>
+          </code>
+        </div>
+      </div>
+
+      <p>To change the direction of movement, we invert the speed in that direction.</p>
+    </article>
+    </div>
+    
+    <div class="navbar-bottom">
+        <a href="pg02_display_text.html" class="nav-left">&#x2B05;</a>
+    </div>
+    <script src="assets/js/highlight.js"></script>
+    <script src="assets/js/script.js"></script>
+  </body>
+<footer>
+    <p class="footer">Copyright © 2019 Aryn Choong. All Rights Reserved.</p>
+</footer>
+</html>

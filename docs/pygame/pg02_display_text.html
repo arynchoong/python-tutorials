@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+    <title>PyGame Basics</title>
+        <link href="assets/css/style.css" rel="stylesheet">
+        <link href="assets/css/responsive.css" rel="stylesheet">
+</head>
+
+<body>
+  <div class="navbar" id="topNav">
+     <a href="https://arynchoong.com" style="padding:0;"><img src="assets/images/aryn-straight.png"></a>
+    <a href="index.html">PyGame</a>
+    <div class="dropdown">
+    <button class="dropbtn" onclick="addDrop()">&#9662;</button>
+    <div class="dropdown-content">
+      <a href="pg01_events.html">Events</a>
+      <a class="active">Text</a>
+      <a href="pg03_animate.html">Animate</a>
+      </div>
+    </div>
+    <a href="javascript:void(0);" class="icon" onclick="addDrop()">&#9776;</a>
+  </div>
+
+  <div class="page">
+    <article>
+      <h1>PyGame Basics</h1>
+      <h2>Display text on screen</h2>
+
+      <p>To display some words on screen, we create some text objects and add them to the screen. Then upate the screen to show the changes by using either <code>display_surf.blit()</code> and <code>pygame.display.flip()</code> or <code>update()</code>.</p>
+
+      <h3>Font</h3>
+
+      <p>To draw text on screen, we need to create the font object. </p>
+      
+      <div class="flex-container">
+        <div class="box">
+          <p>With the font, we can now set our font object:</p>
+        </div>
+        <div class="boxes">
+          <code class="python">
+<pre>class TypingTutor():
+    def __init__(self):
+        pygame.init() # initialises Pygame libraries
+        self.display = pygame.display.set_mode((WIDTH, HEIGHT))
+        self.disp_surf = self.init_display()
+        self.size = WIDTH, HEIGHT
+        self.running = True if self.disp_surf else False
+        self.state = START
+<div class="diff">        self.font = pygame.font.Font()
+</div>        return</pre>
+          </code>
+        </div>
+      </div>
+
+      <h3>Font Colour</h3>
+
+      <div class="flex-container">
+        <div class="box">
+          <p>Let's set our RGB colour for our welcome screen font:</p>
+        </div>
+        <div class="boxes">
+          <code class="python">
+            <pre><span class="c">#            R    G    B</span>
+<span class="cn">BLACK</span>   <span class="ow">=</span> (  <span class="nb">0</span>,   <span class="nb">0</span>,   <span class="nb">0</span>)<div class="diff"><span class="cn">GREEN</span>   <span class="ow">=</span> (  <span class="nb">0</span>, <span class="nb">255</span>,   <span class="nb">0</span>)</div></pre>
+          </code>
+        </div>
+      </div>
+            
+      <div class="flex-container">
+        <div class="box">
+          <p>We can now render our text's surface, or in other words generate our image/sprite object.</p>
+          <p>We'll first create a function that takes the text to display, colour of text and the center position of the text.</p>
+        </div>
+        <div class="boxes">
+          <code class="python">
+            <pre><div class="diff">    def draw_text(self, text, colour, center):
+        '''Draws text onto diplay surface'''
+        text_surf = self.font.render(text, True, colour)</div></pre>
+          </code>
+        </div>
+      </div>
+
+      <div class="flex-container">
+        <div class="box">
+          <p>And retrieve the rectangle object for our surface:</p>
+        </div>
+        <div class="boxes">
+          <code class="python">
+            <pre>    def draw_text(self, text, colour, center):
+        '''Draws text onto diplay surface'''
+        text_surf = self.font.render(text, True, colour)
+<div class="diff">        text_rect = text_surf.get_rect()</div></pre>
+          </code>
+        </div>
+      </div>
+            
+      <div class="flex-container">
+        <div class="box">
+          <p>To set the position of our object, let us put it at center of out display surface:</p>
+        </div>
+        <div class="boxes">
+          <code class="python">
+            <pre>    def draw_text(self, text, colour, center):
+        '''Draws text onto diplay surface'''
+        text_surf = self.font.render(text, True, colour)
+        text_rect = text_surf.get_rect()
+<div class="diff">        text_rect.center = center</div></pre>
+          </code>
+        </div>
+      </div>
+
+      <div class="flex-container">
+        <div class="box">
+          <p>We then have to place it into our draw buffer.</p>
+          <p><code>blit</code> stands for  BLock Image Tranfser. It transfers the created image of our text onto our display surface.</p>
+        </div>
+        <div class="boxes">
+          <code class="python">
+            <pre>    def draw_text(self, text, colour, center):
+        '''Draws text onto diplay surface'''
+        text_surf = self.font.render(text, True, colour)
+        text_rect = text_surf.get_rect()
+        text_rect.center = center
+<div class="diff">        self.disp_surf.blit(text_surf, text_rect)</div></pre>
+          </code>
+        </div>
+      </div>
+        
+      <div class="flex-container">
+        <div class="box">
+          <p>Then we just can just call the function:</p>
+        </div>
+        <div class="boxes">
+          <code class="python">
+            <pre>   def render(self):
+        '''Render surface'''
+        self.disp_surf.fill(BLACK)
+              <div class="diff">        # Draw text
+        self.draw_text("PyGame Basics", GREEN, (int(WIDTH/2), int(HEIGHT/2)))</div></pre>
+          </code>
+        </div>
+      </div>
+
+      <div class="flex-container">
+        <div class="box">
+          <p>It will be updated to the screen when we <code>flip()</code>:</p>
+        </div>
+        <div class="boxes">
+          <code class="python">
+            <pre>        # Blit everything to screen
+        self.display.blit(self.disp_surf, (0,0))
+        pygame.display.flip()</pre>
+          </code>
+        </div>
+      </div>
+    
+      <div class="flex-container">
+        <div class="box">
+          <p>Give it a try, you should end up with green text on black background.</p>
+          <p>Since we have our game states, we can now check that our events are correctly handled by displaying different text for each event.</p>
+        </div>
+        <div class="boxes">
+          <code class="python">
+            <pre>      def render(self):
+      '''Render surface'''
+      self.disp_surf.fill(BLACK)
+                <div class="diff">      # set the text for display
+      if self.state == START:
+          text = 'PyGame Basics'
+          message = 'Press space to play.'
+      else:
+          text = 'Game Over'
+          message = 'State: %s' % self.state
+
+      # draw the messages
+      self.draw_text(text, GREEN, (int(WIDTH / 2), int(HEIGHT / 2) - 50))
+      self.draw_text(message, GREEN, (int(WIDTH / 2), int(HEIGHT / 2) + 50))
+</div>
+      # Blit everything to screen
+      self.display.blit(self.disp_surf, (0,0))
+      pygame.display.flip()
+      return</pre>
+          </code>
+        </div>
+      </div>
+
+      <div class="flex-container">
+        <div class="box">
+          <p>Test to see if the text changes when you hit the spacebar and only the spacebar.</p>
+        </div>
+        <div class="boxes">
+          <div class="console">
+            <pre>python3 -m game</pre>
+          </div>
+        </div>
+      </div>
+    </article>
+    </div>
+
+    <div class="navbar-bottom">
+        <a href="pg01_events.html" class="nav-left">&#x2B05;</a>
+        <a href="pg03_animate.html" class="nav-right">&#x27A1;</a>
+    </div>
+    <script src="assets/js/highlight.js"></script>
+    <script src="assets/js/script.js"></script>
+  </body>
+<footer>
+    <p class="footer">Copyright © 2019 Aryn Choong. All Rights Reserved.</p>
+</footer>
+</html>

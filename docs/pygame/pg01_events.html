@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+    <title>PyGame Basics</title>
+        <link href="assets/css/style.css" rel="stylesheet">
+        <link href="assets/css/responsive.css" rel="stylesheet">
+</head>
+<body>
+    <div class="navbar" id="topNav">
+        <a href="https://arynchoong.com" style="padding:0;"><img src="assets/images/aryn-straight.png"></a>
+        <a href="index.html">PyGame</a>
+        <div class="dropdown">
+        <button class="dropbtn" onclick="addDrop()">&#9662;</button>
+        <div class="dropdown-content">
+            <a class="active">Events</a>
+            <a href="pg02_display_text.html">Text</a>
+            <a href="pg03_animate.html">Animate</a>
+        </div>
+        </div>
+        <a href="javascript:void(0);" class="icon" onclick="addDrop()">&#9776;</a>
+    </div>
+    <div class="page">
+    <article>
+        <h1>PyGame Events</h1>
+
+        <h2>Game states and loops</h2>
+        <p>All games work similarly in that it has states and loops. </p>
+        <p>Typical game states are <i>playing</i> and <i>game over</i> states.</p>
+        <p>And the game loop is where we sert up the levels and user game play (when is the 'game over'). It is where we determine how complex the game is.</p>
+
+        <h2>Game states</h2>
+
+        <div class="flex-container"><div class="box">
+            <p>Now that we have our object oriented game object. Let's add our game states: <code>START</code>, <code>PLAYING</code> and <code>GAMEOVER</code>. </p>
+        </div><div class="boxes">
+        <code class="python">
+<pre><div class="diff"># States
+START = 1
+PLAYING = 2
+GAMEOVER = 3</div></pre>
+        </code></div></div>
+
+        <h2>Game loop and events</h2>
+        <p>With our game states, we can now set up our main game loop.</p>
+        <p>We will have two loops in our game, the main game loop with the game states, and our inner play loop that we go into for each level that we will add in later.</p>
+        <p>And in addition to our checking of <code>QUIT</code> event, we check for <code>KEYUP</code> event and increment the state or reset it if it is <code>GAMEOVER</code>.</p>
+        <p>But only for the spacebar. Since this is a typing game, we want to prevent accidentally switching state with our typing keys.</p>
+
+        <div class="flex-container"><div class="box">
+            <p>Now we can use the state flag</p>
+        </div><div class="boxes">
+        <code class="python">
+<pre>
+        self.running = True if self.disp_surf else False
+<div class=diff>        self.state = START</div>
+    def check_events(self):
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                self.running = False
+<div class=diff>                self.state = GAMEOVER
+                return
+            elif event.type == pygame.KEYUP:
+                if event.key == pygame.K_SPACE:
+                    if self.state == GAMEOVER:
+                        self.state = START
+                    else:
+                        self.state +=1</div>        return
+</pre>
+        </code></div></div>
+
+        <p>It's hard to tell which state we are at for now, we'll take care of that when we draw text.</p>
+        <p>The inner loop will be taking care of rendering when the game is playing. So we only need to bother with <code>START</code> and <code>GAMEOVER</code>.</p>
+
+        <div class="flex-container"><div class="box">
+            <p>So let's add a <code>render</code> function.</p>
+            <p>Fill the surface with black:</p>
+        </div><div class="boxes"><code class="python">
+<pre><div class=diff>#            R    G    B
+BLACK   = (  0,   0,   0)
+</div> .
+ .
+ .
+    def execute(self):
+        # Event loop
+        while self.running:
+            self.check_events()
+<div class=diff>            self.render()
+        return
+
+    def render(self):
+        '''Render surface'''
+        self.disp_surf.fill(BLACK)
+
+        # Blit everything to screen
+        self.display.blit(self.disp_surf, (0,0))
+        pygame.display.flip()
+        return</div></pre>
+        </code></div></div>
+
+        <p><code>blit()</code>, stands for block transfer, will prepare image for 'transfer' onto the display surface. Or in other words, draw in buffer for transfer to surface.</p>
+        <p><code>flip()</code>, will flip and update the whole display and show the changes to the game display.</p>
+        <p><code>update()</code>, will only update a portion of the screen, that is the drawn rect or area without updating the whole display.</p>
+        
+        <p>I would do a quick test and run the script now, to check that nothing is broken. There is nothing new to observe when the screen comes up, except that our screen is black instead of grey.</p>
+
+    </article>
+    </div>
+
+    <div class="navbar-bottom">
+        <a href="index.html" class="nav-left">&#x2B05;</a>
+        <a href="pg02_display_text.html" class="nav-right">&#x27A1;</a>
+    </div>
+    <script src="assets/js/highlight.js"></script>
+    <script src="assets/js/script.js"></script>
+</body>
+<footer>
+    <p class="footer">Copyright © 2019 Aryn Choong. All Rights Reserved.</p>
+</footer>
+</html>
