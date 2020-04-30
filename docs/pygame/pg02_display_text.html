@@ -40,7 +40,7 @@
         </div>
         <div class="boxes">
           <code class="python">
-<pre>class TypingTutor():
+<pre>class Game():
     def __init__(self):
         pygame.init() # initialises Pygame libraries
         self.display = pygame.display.set_mode((WIDTH, HEIGHT))
@@ -48,7 +48,7 @@
         self.size = WIDTH, HEIGHT
         self.running = True if self.disp_surf else False
         self.state = START
-<div class="diff">        self.font = pygame.font.Font()
+<div class="diff">        self.font = pygame.font.Font(pygame.font.get_default_font(), 36)
 </div>        return</pre>
           </code>
         </div>

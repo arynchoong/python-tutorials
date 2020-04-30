@@ -62,15 +62,15 @@ class Game():
 
     def render_play(self):
         '''Render surface'''
-        self.disp_surf.fill(BLACK)
-        self.display.blit(self.disp_surf, (0,0))
-
         # draw ball
         self.ballrect = self.ballrect.move(self.speed)
         if self.ballrect.left < 0 or self.ballrect.right > WIDTH:
             self.speed[0] = -self.speed[0]
         if self.ballrect.top < 0 or self.ballrect.bottom > HEIGHT:
             self.speed[1] = -self.speed[1]
+        
+        # fill background and draw ball
+        self.display.fill(BLACK)
         self.display.blit(self.ball, self.ballrect)
 
         # update display
