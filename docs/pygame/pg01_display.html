@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+    <title>PyGame Basics</title>
+        <link href="assets/css/style.css" rel="stylesheet">
+        <link href="assets/css/responsive.css" rel="stylesheet">
+</head>
+<body>
+    <div class="navbar" id="topNav">
+        <a href="https://arynchoong.com" style="padding:0;"><img src="assets/images/aryn-straight.png"></a>
+        <a href="index.html">PyGame</a>
+        <div class="dropdown">
+        <button class="dropbtn" onclick="addDrop()">&#9662;</button>
+        <div class="dropdown-content">
+            <a class="active">Events</a>
+            <a href="pg02_text.html">Text</a>
+            <a href="pg03_animate.html">Animate</a>
+        </div>
+        </div>
+        <a href="javascript:void(0);" class="icon" onclick="addDrop()">&#9776;</a>
+    </div>
+    <div class="page">
+    <article>
+        <h1>PyGame Loop</h1>
+
+        <h2>Window Title</h2>
+      
+        <div class="flex-container">
+          <div class="box">
+            <p>We can set the window title by using <code>set_caption()</code></p>
+          </div>
+          <div class="boxes">
+            <code class="python">
+              <pre>    def init_display(self):
+<div class="diff">        pygame.display.set_caption('PyGame Basics Workshop')
+</div>        # Create surface
+        disp_surf = pygame.Surface(self.size)
+        return disp_surf.convert()</pre>
+            </code>
+          </div>
+        </div>
+        
+        <p><code>set_caption()</code> sets the game caption (application title) on the top of the display.</p>
+        <br/>
+        <h2>Render</h2>
+        <p>Let put something on screen during our game loop.</p>
+
+        <div class="flex-container"><div class="box">
+            <p>So let's add a <code>render</code> function.</p>
+            <p>Fill the surface with black:</p>
+        </div><div class="boxes"><code class="python">
+<pre><div class=diff>#            R    G    B
+BLACK   = (  0,   0,   0)
+</div> .
+ .
+ .
+    def execute(self):
+        # Event loop
+        while self.running:
+            self.check_events()
+<div class=diff>            self.render()
+        return
+
+    def render(self):
+        '''Render surface'''
+        self.disp_surf.fill(BLACK)
+
+        # Blit everything to screen
+        self.display.blit(self.disp_surf, (0,0))
+        pygame.display.flip()
+        return</div></pre>
+        </code></div></div>
+
+        <p><code>blit()</code>, stands for block transfer, will prepare image for 'transfer' onto the display surface. Or in other words, draw in buffer for transfer to surface.</p>
+        <p><code>flip()</code>, will flip and update the whole display and show the changes to the game display.</p>
+        <p><code>update()</code>, will only update a portion of the screen, that is the drawn rect or area without updating the whole display.</p>
+        
+        <p>I would do a quick test and run the script now, to check that nothing is broken. There is nothing new to observe when the screen comes up, except that our screen is black instead of grey.</p>
+
+    </article>
+    </div>
+
+    <div class="navbar-bottom">
+        <a href="index.html" class="nav-left">&#x2B05;</a>
+        <a href="pg02_text.html" class="nav-right">&#x27A1;</a>
+    </div>
+    <script src="assets/js/highlight.js"></script>
+    <script src="assets/js/script.js"></script>
+</body>
+<footer>
+    <p class="footer">Copyright © 2019 Aryn Choong. All Rights Reserved.</p>
+</footer>
+</html>

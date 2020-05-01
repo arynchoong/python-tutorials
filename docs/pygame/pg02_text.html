@@ -15,7 +15,7 @@
     <div class="dropdown">
     <button class="dropbtn" onclick="addDrop()">&#9662;</button>
     <div class="dropdown-content">
-      <a href="pg01_events.html">Events</a>
+      <a href="pg01_display.html">Display</a>
       <a class="active">Text</a>
       <a href="pg03_animate.html">Animate</a>
       </div>
@@ -47,7 +47,6 @@
         self.disp_surf = self.init_display()
         self.size = WIDTH, HEIGHT
         self.running = True if self.disp_surf else False
-        self.state = START
 <div class="diff">        self.font = pygame.font.Font(pygame.font.get_default_font(), 36)
 </div>        return</pre>
           </code>
@@ -62,8 +61,9 @@
         </div>
         <div class="boxes">
           <code class="python">
-            <pre><span class="c">#            R    G    B</span>
-<span class="cn">BLACK</span>   <span class="ow">=</span> (  <span class="nb">0</span>,   <span class="nb">0</span>,   <span class="nb">0</span>)<div class="diff"><span class="cn">GREEN</span>   <span class="ow">=</span> (  <span class="nb">0</span>, <span class="nb">255</span>,   <span class="nb">0</span>)</div></pre>
+            <pre>#            R    G    B
+BLACK   = (  0,   0,   0)
+<div class="diff">GREEN   = (  3, 192,  60)</div></pre>
           </code>
         </div>
       </div>
@@ -155,40 +155,10 @@
           </code>
         </div>
       </div>
-    
+
       <div class="flex-container">
         <div class="box">
           <p>Give it a try, you should end up with green text on black background.</p>
-          <p>Since we have our game states, we can now check that our events are correctly handled by displaying different text for each event.</p>
-        </div>
-        <div class="boxes">
-          <code class="python">
-            <pre>      def render(self):
-      '''Render surface'''
-      self.disp_surf.fill(BLACK)
-                <div class="diff">      # set the text for display
-      if self.state == START:
-          text = 'PyGame Basics'
-          message = 'Press space to play.'
-      else:
-          text = 'Game Over'
-          message = 'State: %s' % self.state
-
-      # draw the messages
-      self.draw_text(text, GREEN, (int(WIDTH / 2), int(HEIGHT / 2) - 50))
-      self.draw_text(message, GREEN, (int(WIDTH / 2), int(HEIGHT / 2) + 50))
-</div>
-      # Blit everything to screen
-      self.display.blit(self.disp_surf, (0,0))
-      pygame.display.flip()
-      return</pre>
-          </code>
-        </div>
-      </div>
-
-      <div class="flex-container">
-        <div class="box">
-          <p>Test to see if the text changes when you hit the spacebar and only the spacebar.</p>
         </div>
         <div class="boxes">
           <div class="console">
@@ -200,7 +170,7 @@
     </div>
 
     <div class="navbar-bottom">
-        <a href="pg01_events.html" class="nav-left">&#x2B05;</a>
+        <a href="pg01_display.html" class="nav-left">&#x2B05;</a>
         <a href="pg03_animate.html" class="nav-right">&#x27A1;</a>
     </div>
     <script src="assets/js/highlight.js"></script>

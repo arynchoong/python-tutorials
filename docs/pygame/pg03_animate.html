@@ -13,8 +13,8 @@
     <div class="dropdown">
       <button class="dropbtn" onclick="addDrop()">&#9662;</button>
       <div class="dropdown-content">
-        <a href="pg01_events.html">Events</a>
-        <a href="pg02_display_text.html">Text</a>
+        <a href="pg01_display.html">Display</a>
+        <a href="pg02_text.html">Text</a>
         <a class="active">Animate</a>
       </div>
     </div>
@@ -24,11 +24,20 @@
   <div class="page">
     <article>
       <h1>PyGame Basics</h1>
-      <h2>Animate graphic object</h2>
+      <div class="flex-container">
+        <div class="box">
+        <h2>Animate graphic object</h2>
+        <p>Let's add an image to our text only screen.</p>
+        </div>
+        <div class="box">
+          <img src="assets/images/ball.png" alt="Ball image" style="width:100px;height:100px;"/>
+        </div>
+      </div>
       
       <div class="flex-container">
         <div class="box">
-          <p>Now that we have our main loop, let us create our inner game play loop:</p>
+          <p>To load an image, we use <code>pygame.image.load()</code>, and pass in the file path. The <code>pygame.image.load()</code> function returns a Surface with the ball surface data.</p>
+          <p>To can manipulate the image by retrieving the rectangular object of the image, <code>Rect</code>.</p>
         </div>
         <div class="boxes">
           <code class="python">
@@ -39,48 +48,39 @@
         self.disp_surf = self.init_display()
         self.size = WIDTH, HEIGHT
         self.running = True if self.disp_surf else False
-        self.state = START
         self.font = pygame.font.Font(pygame.font.get_default_font(), 36)
 <div class="diff">        self.ball = pygame.image.load("ball.png")
         self.ballrect = self.ball.get_rect()
         self.speed = [2, 2]
-</div>        return
- . 
- . 
- . 
-    def execute(self):
-        # Event loop
-        while self.running:
-            self.check_events()
-<div class="diff">            if self.state == PLAYING:
-                self.render_play()
-            else:
-                self.render()
 </div>        return</pre>
           </code>
         </div>
       </div>
 
+      <p>We want to display the ball animation.</p>
+
       <div class="flex-container">
         <div class="box">
-          <p>Let's create <code>render_play()</code>.</p>
+          <p>Let's create <code>render()</code>.</p>
           <p>Here we want to animate our beach ball.</p>
         </div>
         <div class="boxes">
           <code class="python">
-            <pre><div class="diff">    def render_play(self):
+            <pre>    def render(self):
         '''Render surface'''
         self.disp_surf.fill(BLACK)
+        # Draw text
+        self.draw_text("PyGame Basics", GREEN, (int(WIDTH/2), int(HEIGHT/2)))
         self.display.blit(self.disp_surf, (0,0))
 
-        # setup ball
+<div class="diff">        # setup ball
         self.ballrect = self.ballrect.move(self.speed)
-        self.display.blit(self.ball, self.ballrect)
+        self.display.blit(self.ball, self.ballrect)</div>
 
         # update display
         pygame.display.flip()
 
-        # update speed
+<div class="diff">        # update speed
         if self.ballrect.left < 0 or self.ballrect.right > WIDTH:
             self.speed[0] = -self.speed[0]
         if self.ballrect.top < 0 or self.ballrect.bottom > HEIGHT:
@@ -91,12 +91,18 @@
         </div>
       </div>
 
-      <p>To change the direction of movement, we invert the speed in that direction.</p>
+      <p>We use the <code>Rect.move()</code> to change the position of the ball Surface by the <code>speed</code>. Which means it move <code>(2,2)</code> pixels on every cycle on its horizontal and vertical axis.</p>
+      <p>We then draw the ball with <code>blit()</code></p>
+      <p>Pygame manages the display with a second buffer, and to update the current buffer with the one we just drawn we call <code>pygame.display.flip()</code>.</p>
+      <p>After drawing, we update the speed of the ball if it moves off screen. To change the direction of movement, we invert the speed in that direction.</p>
+    
+      <br/>
+      <p>Test the codes. We should have a diagonally moving ball, bouncing about.</p>
     </article>
     </div>
     
     <div class="navbar-bottom">
-        <a href="pg02_display_text.html" class="nav-left">&#x2B05;</a>
+        <a href="pg02_text.html" class="nav-left">&#x2B05;</a>
     </div>
     <script src="assets/js/highlight.js"></script>
     <script src="assets/js/script.js"></script>

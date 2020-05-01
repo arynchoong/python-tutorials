@@ -14,8 +14,8 @@
     <div class="dropdown">
     <button class="dropbtn" onclick="addDrop()">&#9662;</button>
     <div class="dropdown-content">
-      <a href="pg01_events.html">Events</a>
-      <a href="pg02_display_text.html">Text</a>
+      <a href="pg01_display.html">Display</a>
+      <a href="pg02_text.html">Text</a>
       <a href="pg03_animate.html">Animate</a>
     </div>
     </div>
@@ -32,7 +32,7 @@
           <p>For more information about the Pygame module, please see it's wiki <a href="https://www.pygame.org/wiki/about">page</a>.</p>
         </div>
         <div class="boxes">
-          <img src="assets/images/pygame.png"/>
+          <img src="assets/images/pygame.png" alt="Pygame logo"/>
         </div>
       </div>
 
@@ -157,21 +157,43 @@ class Game():
         </div>
       </div>
 
-      <p><code>set_caption()</code> sets the game caption (application title) on the top of the display.</p>
-      <p>The display surface is our game play surface area, where we load onto the screen where the game runs.</p>
+      <p>The display surface is our game play surface area, where we load onto the screen when the game runs.</p>
 
-      <h2>Game loop</h2>
+      <h2>Events</h2>
       
       <div class="flex-container">
         <div class="box">
           <p>And any game will require user input in some form or another, let us now add the codes to check for trigger to close the game. (user clicking the red cross icon on top corner of our display surface)</p>
+          <p>First we add a <code>running</code> flag to only loop when we have successfully initialised our display surface.</p>
         </div>
         <div class="boxes">
           <code class="python">
-            <pre>        self.size = WIDTH, HEIGHT
-<div class="diff">        self.running = True if self.disp_surf else False
+            <pre>class Game():
+    def __init__(self):
+        pygame.init()
+        self.size = WIDTH, HEIGHT
+        self.display = pygame.display.set_mode(self.size)
+        self.disp_surf = self.init_display()
+<div class="diff">        self.running = True if self.disp_surf else False</div></pre>
+          </code>
+        </div>
+      </div>
+
+      <div class="flex-container">
+        <div class="box">
+          <p>We then add an <code>execute</code> function to perform the loop.</p>
+        </div>
+        <div class="boxes">
+          <code class="python">
+            <pre>class Game():
+    def __init__(self):
+        pygame.init()
+        self.size = WIDTH, HEIGHT
+        self.display = pygame.display.set_mode(self.size)
+        self.disp_surf = self.init_display()
+        self.running = True if self.disp_surf else False
   
-    def execute(self):
+<div class="diff">    def execute(self):
         # Event loop
         while self.running:
             self.check_events()
@@ -187,6 +209,9 @@ class Game():
         </div>
       </div>
 
+      <p>The <code>check_events()</code> function will take care of checking if the user has hit the red cross, and quit the game when that happens.</p>
+      <p>The codes check all the events for the game, if it gets the event <code>pygame.QUIT</code>, it exits the loop.</p>
+
       <div class="flex-container">
         <div class="box">
           <p>Now we just need to execute the codes.</p>
@@ -200,7 +225,6 @@ class Game():
         </div>
       </div>
       
-      <p>The codes set a flag called <code>running</code> and check all the events for the game, if it gets the event <code>pygame.QUIT</code>, it exits the loop.</p>
       <h2>Test it</h2>
 
       <div class="flex-container">
@@ -217,28 +241,11 @@ class Game():
 
       <p>This is the quick show of what is required to use PyGame.</p>
 
-      <h2>Window Title</h2>
-      
-      <div class="flex-container">
-        <div class="box">
-          <p>We can set the window title by using <code>set_caption()</code></p>
-        </div>
-        <div class="boxes">
-          <code class="python">
-            <pre>    def init_display(self):
-<div class="diff">        pygame.display.set_caption('PyGame Basics Workshop')
-</div>        # Create surface
-        disp_surf = pygame.Surface(self.size)
-        return disp_surf.convert()</pre>
-          </code>
-        </div>
-      </div>
-
   </article>
   </div>
 
   <div class="navbar-bottom">
-      <a href="pg01_events.html" class="nav-right">&#x27A1;</a>
+      <a href="pg01_display.html" class="nav-right">&#x27A1;</a>
   </div>
   <script src="assets/js/highlight.js"></script>
   <script src="assets/js/script.js"></script>
