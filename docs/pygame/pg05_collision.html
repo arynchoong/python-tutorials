@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+  <title>PyGame Basics</title>
+  <link href="assets/css/style.css" rel="stylesheet">
+  <link href="assets/css/responsive.css" rel="stylesheet">
+</head>
+
+<body>
+  <div class="navbar" id="topNav">
+    <a href="https://arynchoong.com" style="padding:0;"><img src="assets/images/aryn-straight.png"></a>
+    <a href="index.html">PyGame</a>
+    <div class="dropdown">
+      <button class="dropbtn" onclick="addDrop()">&#9662;</button>
+      <div class="dropdown-content">
+        <a href="pg01_display.html">Display</a>
+        <a href="pg02_text.html">Text</a>
+        <a href="pg03_animate.html">Animate</a>
+        <a href="pg04_object.html">Object</a>
+        <a class="active">Collision</a>
+        <a href="pg06_sound.html">Sound</a>
+        <a href="pg07_levels.html">Levels</a>
+      </div>
+    </div>
+    <a href="javascript:void(0);" class="icon" onclick="addDrop()">&#9776;</a>
+  </div>
+
+  <div class="page">
+    <article>
+      <h1>PyGame Basics</h1>
+      <h2>Collision</h2>
+      <p>In games, when an object touches another object or boundary, we call it a collision. As an event that we want to handle.</p>
+      <p>Here, let's spin the ball and reverse it's direction whenever the hand hits the ball.</p>
+
+    <div class="flex-container">
+      <div class="box">
+        <p>First, let's set a spin flag and set the movements for the ball.</p>
+      </div>
+      <div class="boxes">
+        <code class="python">
+          <pre>class Ball(pygame.sprite.Sprite):
+    """Bounce a ball around the screen. It can spin when it is hit."""
+
+    def __init__(self):
+        pygame.sprite.Sprite.__init__(self)  # call Sprite intializer
+        self.screen = pygame.display.get_surface()
+        self.image = pygame.image.load("ball.png")
+        self.rect = self.image.get_rect()
+        self.speed = [2, 2]
+<div class="diff">        self.spin = 0
+</div>
+    def update(self):
+        """move or spin, depending on the spin state"""
+<div class="diff">        if self.spin:
+            self._spin()
+        else:
+            self._move()
+</div>
+    def _move(self):
+        """move the ball across the screen, reverse speed at the ends"""
+        self.rect = self.rect.move(self.speed)
+        if self.rect.left < 0 or self.rect.right > WIDTH:
+            self.speed[0] = -self.speed[0]
+        if self.rect.top < 0 or self.rect.bottom > HEIGHT:
+            self.speed[1] = -self.speed[1]
+
+<div class="diff">    def _spin(self):
+        """spin the ball image"""
+        center = self.rect.center
+        self.spin += 60
+        if self.spin >= 360:
+            self.spin = 0
+            self.image = self.original
+        else:
+            rotate = pygame.transform.rotate
+            self.image = rotate(self.original, self.spin)
+        self.rect = self.image.get_rect(center=center)
+
+    def hit(self):
+        """this will cause the ball to start spinning"""
+        if not self.spin:
+            self.spin = 60
+            self.original = self.image
+            # Reverse direction
+            self.speed = [-x for x in self.speed]</div></pre>
+          </code>
+        </div>
+      </div>
+      
+      <div class="flex-container">
+        <div class="box">
+          <p>We now do the same for the hand. Add a hit flag and check for collision with the ball and return True or False if collision occurs.</p>
+        </div>
+        <div class="boxes">
+          <code class="python">
+            <pre>class Hand(pygame.sprite.Sprite):
+    """moves a hand icon on the screen, following the mouse"""
+
+    def __init__(self):
+        pygame.sprite.Sprite.__init__(self)  # call Sprite initializer
+        self.image = pygame.image.load("hand.png")
+        self.rect = self.image.get_rect()
+<div class="diff">        self.hitting = 0
+</div>
+    def update(self):
+        """move the hand based on the mouse position"""
+        pos = pygame.mouse.get_pos()
+        self.rect.midtop = pos
+<div class="diff">        if self.hitting:
+            self.rect.move_ip(5, 10)
+
+    def hit(self, target):
+        """returns true if the hand collides with the target"""
+        if not self.hitting:
+            self.hitting = 1
+            hitbox = self.rect.inflate(-5, -5)
+            return hitbox.colliderect(target.rect)
+
+    def unhit(self):
+        """called to pull the hand back"""
+        self.hitting = 0</div></pre>
+          </code>
+        </div>
+      </div>
+
+      <h2>Handle events</h2>
+      
+      <div class="flex-container">
+        <div class="box">
+          <p>To trigger the actions, we will need to handle it in the <code>check_events</code> loop.</p>
+        </div>
+        <div class="boxes">
+          <code class="python">
+            <pre>    def check_events(self):
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                self.running = False
+            elif event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
+                self.running = False
+<div class="diff">            elif event.type == pygame.MOUSEBUTTONDOWN:
+                if self.hand.hit(self.ball):
+                    self.ball.hit()
+            elif event.type == pygame.MOUSEBUTTONUP:
+                self.hand.unhit()
+</div>        return</pre>
+          </code>
+        </div>
+      </div>
+
+      <p>Now, play the game!! 🎈</p>
+
+    </article>
+    </div>
+
+    <div class="navbar-bottom">
+        <a href="pg04_object.html" class="nav-left">&#x2B05;</a>
+        <a href="pg06_sound.html" class="nav-right">&#x27A1;</a>
+    </div>
+    <script src="assets/js/highlight.js"></script>
+    <script src="assets/js/script.js"></script>
+  </body>
+<footer>
+    <p class="footer">Copyright © 2019 Aryn Choong. All Rights Reserved.</p>
+</footer>
+</html>

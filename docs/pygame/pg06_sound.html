@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+    <title>PyGame Basics</title>
+    <link href="assets/css/style.css" rel="stylesheet">
+    <link href="assets/css/responsive.css" rel="stylesheet">
+</head>
+
+<body>
+  <div class="navbar" id="topNav">
+    <a href="https://arynchoong.com" style="padding:0;"><img src="assets/images/aryn-straight.png"></a>
+    <a href="index.html">PyGame</a>
+    <div class="dropdown">
+      <button class="dropbtn" onclick="addDrop()">&#9662;</button>
+      <div class="dropdown-content">
+        <a href="pg01_display.html">Display</a>
+        <a href="pg02_text.html">Text</a>
+        <a href="pg03_animate.html">Animate</a>
+        <a href="pg04_object.html">Object</a>
+        <a href="pg05_collision.html">Collision</a>
+        <a class="active">Sound</a>
+        <a href="pg07_levels.html">Levels</a>
+      </div>
+    </div>
+    <a href="javascript:void(0);" class="icon" onclick="addDrop()">&#9776;</a>
+  </div>
+
+  <div class="page">
+    <article>
+      <h1>PyGame Basics</h1>
+      <h2>Sound</h2>
+      <p>Other than giving user feedback visually, we can also provide auditory feedback.</p>
+      
+      <div class="flex-container">
+        <div class="box">
+          <p>To add some sounds, we use the <code>pygame.mixer.Sound()</code></p>
+        </div>
+        <div class="boxes">
+          <code class="python">
+            <pre>class Game():
+    def __init__(self):
+        pygame.init() # initialise pygame libraries
+        self.size = WIDTH, HEIGHT
+        self.display = pygame.display.set_mode(self.size)
+        self.disp_surf = self.init_display()
+        self.running = True if self.disp_surf else False
+        self.font = pygame.font.Font(pygame.font.get_default_font(), 36)
+        self.ball = Ball()
+        self.hand = Hand()
+        self.allsprites = pygame.sprite.RenderPlain((self.ball, self.hand))
+<div class="diff">        self.sound_hit = pygame.mixer.Sound("thump.wav")
+        self.sound_missed = pygame.mixer.Sound("swish.wav")</div></pre>
+          </code>
+        </div>
+      </div>
+
+      <div class="flex-container">
+        <div class="box">
+          <p>And then play the sound when we have a hit:</p>
+        </div>
+        <div class="boxes">
+          <code class="python">
+            <pre>    def check_events(self):
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                self.running = False
+            elif event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
+                self.running = False
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                if self.hand.hit(self.ball):
+                    self.ball.hit()
+<div class="diff">                    self.sound_hit.play()
+                else:
+                    self.sound_missed.play()</div>
+            elif event.type == pygame.MOUSEBUTTONUP:
+                self.hand.unhit()
+        return</pre>
+          </code>
+        </div>
+      </div>
+
+      <p>I get my sound files from https://freesound.org/, it requires you to create a free account with the site.</p>
+      <p>You can download the sounds used above from the github repository: <a href="">thump.wav</a>, <a href="">swish.wav</a></p>
+
+    </article>
+  </div>
+
+  <div class="navbar-bottom">
+    <a href="pg05_collision.html" class="nav-left">&#x2B05;</a>
+    <a href="pg07_levels.html" class="nav-right">&#x27A1;</a>
+  </div>
+  <script src="assets/js/highlight.js"></script>
+  <script src="assets/js/script.js"></script>
+</body>
+<footer>
+    <p class="footer">Copyright © 2019 Aryn Choong. All Rights Reserved.</p>
+</footer>
+</html>

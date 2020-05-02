@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html>
+<head><meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+    <title>PyGame Basics</title>
+        <link href="assets/css/style.css" rel="stylesheet">
+        <link href="assets/css/responsive.css" rel="stylesheet">
+</head>
+
+<body>
+  <div class="navbar" id="topNav">
+    <a href="https://arynchoong.com" style="padding:0;"><img src="assets/images/aryn-straight.png"></a>
+    <a href="index.html">PyGame</a>
+    <div class="dropdown">
+      <button class="dropbtn" onclick="addDrop()">&#9662;</button>
+      <div class="dropdown-content">
+        <a href="pg01_display.html">Display</a>
+        <a href="pg02_text.html">Text</a>
+        <a href="pg03_animate.html">Animate</a>
+        <a class="active">Objects</a>
+        <a href="pg05_collision.html">Collision</a>
+        <a href="pg06_sound.html">Sound</a>
+        <a href="pg07_levels.html">Levels</a>
+      </div>
+    </div>
+    <a href="javascript:void(0);" class="icon" onclick="addDrop()">&#9776;</a>
+  </div>
+
+  <div class="page">
+    <article>
+      <h1>PyGame Basics</h1>
+      <h2>Game object - sprites</h2>
+      <p>In the old days where speed is essential in games, we have to be judicious with how may images we use and their loading time for a game.</p>
+      <p>Images are all placed together in one big image containing the seperate images required for a section of the game, called sprites. That way, the game only need to load the image once, and the different segments are displayed seperately depending on game play.</p>
+      <br/>
+      <div class="flex-container">
+        <div class="box">
+          <p>Now that we have our game loop, let's make our game object oriented to make it easier to extend.</p>
+          <p>First we create our ball object.</p>
+        </div>
+        <div class="boxes">
+          <code class="python">
+            <pre><div class="diff">class Ball(pygame.sprite.Sprite):
+    """Bounce a ball around the screen."""
+
+    def __init__(self):
+        pygame.sprite.Sprite.__init__(self)  # call Sprite intializer
+        self.screen = pygame.display.get_surface()
+        self.image = pygame.image.load("ball.png")
+        self.rect = self.image.get_rect()
+        self.speed = [2, 2]
+
+    def update(self):
+        """move the ball"""
+        self._move()
+
+    def _move(self):
+        """move the ball across the screen, reverse speed at the ends"""
+        self.rect = self.rect.move(self.speed)
+        if self.rect.left < 0 or self.rect.right > WIDTH:
+            self.speed[0] = -self.speed[0]
+        if self.rect.top < 0 or self.rect.bottom > HEIGHT:
+            self.speed[1] = -self.speed[1]</div></pre>
+          </code>
+        </div>
+      </div>
+
+      <p>We create our ball object and inherited the sprite object and all it's preset functions. It is just a wrapper function that will allow us to utilise it as a game object easily.</p>
+      <h2>Ball object</h2>
+
+      <div class="flex-container">
+        <div class="box">
+          <p>To utilise our ball object, we create a Ball instance and add it to pygame's sprite stack:</p>
+        </div>
+        <div class="boxes">
+          <code class="python">
+            <pre>class Game():
+    def __init__(self):
+        pygame.init() # initialise pygame libraries
+        self.size = WIDTH, HEIGHT
+        self.display = pygame.display.set_mode(self.size)
+        self.disp_surf = self.init_display()
+        self.running = True if self.disp_surf else False
+        self.font = pygame.font.Font(pygame.font.get_default_font(), 36)
+<div class="diff">        self.ball = Ball()
+        self.allsprites = pygame.sprite.RenderPlain((self.ball))
+        return
+</div></pre>
+          </code>
+        </div>
+      </div>
+
+      <h2>Rendering sprites</h2>
+
+      <div class="flex-container">
+        <div class="box">
+          <p>Because ball is a sprite object, we can just update it's settings, and let pygame take care of the drawing of the sprite.</p>
+          <p>Note the order in which the images are drawn, or in this case transferred onto the screen, matters.</p>
+        </div>
+        <div class="boxes">
+          <code class="python">
+            <pre>    def render(self):
+        '''Render surface'''
+        # background
+        self.disp_surf.fill(BLACK)
+        # draw text
+        text = "Bouncing Ball"
+        self.draw_text(text, GREEN, (int(WIDTH / 2), int(HEIGHT / 2)))
+        # Blit everything to screen
+        self.display.blit(self.disp_surf, (0,0))
+
+<div class="diff">        # draw ball
+        self.allsprites.update()
+        self.allsprites.draw(self.display)
+</div>
+        # update display
+        pygame.display.flip()
+        return</pre>
+          </code>
+        </div>
+      </div>
+      
+      <h2>Mouse Pointer</h2>
+      <p>Let's ramp up our little game, by adding a hand as a mouse pointer.</p>
+      <p>Get a hand image, make it about 50x50 px.</p>
+      <div class="flex-container">
+        <div class="box">
+          To add a graphic mouse pointer, we want our mouse to be shown.
+        </div>
+        <div class="boxes">
+          <code class="python">
+            <pre>    def init_display(self):
+        pygame.display.set_caption('Bouncing Ball')
+<div class="diff">        pygame.mouse.set_visible(0)
+</div>        # Create surface
+        disp_surf = pygame.Surface(self.size)
+        return disp_surf.convert()</pre>
+          </code>
+        </div>
+      </div>
+
+      <br/>
+
+      <div class="flex-container">
+        <div class="box">
+          <p>Add create our mouse object.</p>
+        </div>
+        <div class="boxes">
+          <code class="python">
+            <pre><div class="diff">class Hand(pygame.sprite.Sprite):
+    """moves a hand icon on the screen, following the mouse"""
+
+    def __init__(self):
+        pygame.sprite.Sprite.__init__(self)  # call Sprite initializer
+        self.image = pygame.image.load("hand.png")
+        self.rect = self.image.get_rect()
+
+    def update(self):
+        """move the fist based on the mouse position"""
+        pos = pygame.mouse.get_pos()
+        self.rect.center = pos
+            </div></pre>
+          </code>
+        </div>
+      </div>
+
+      <br/>
+
+      <div class="flex-container">
+        <div class="box">
+          <p>And add to our sprite stack.</p>
+        </div>
+        <div class="boxes">
+          <code class="python">
+            <pre>class Game():
+    def __init__(self):
+        pygame.init() # initialise pygame libraries
+        self.size = WIDTH, HEIGHT
+        self.display = pygame.display.set_mode(self.size)
+        self.disp_surf = self.init_display()
+        self.running = True if self.disp_surf else False
+        self.font = pygame.font.Font(pygame.font.get_default_font(), 36)
+        self.ball = Ball()
+<div class="diff">        self.hand = Hand()
+        self.allsprites = pygame.sprite.RenderPlain((self.ball, self.hand))</div></pre>
+          </code>
+        </div>
+      </div>
+
+      <p>Test it out and play with it. &#128512;</p>
+
+    </article>
+  </div>
+
+  <div class="navbar-bottom">
+    <a href="pg03_animate.html" class="nav-left">&#x2B05;</a>
+    <a href="pg05_collision.html" class="nav-right">&#x27A1;</a>
+  </div>
+  <script src="assets/js/highlight.js"></script>
+  <script src="assets/js/script.js"></script>
+</body>
+
+<footer>
+  <p class="footer">Copyright © 2019 Aryn Choong. All Rights Reserved.</p>
+</footer>
+</html>

@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+    <title>PyGame Basics</title>
+    <link href="assets/css/style.css" rel="stylesheet">
+    <link href="assets/css/responsive.css" rel="stylesheet">
+</head>
+
+<body>
+    <div class="navbar" id="topNav">
+        <a href="https://arynchoong.com" style="padding:0;"><img src="assets/images/aryn-straight.png"></a>
+        <a href="index.html">PyGame</a>
+        <div class="dropdown">
+          <button class="dropbtn" onclick="addDrop()">&#9662;</button>
+          <div class="dropdown-content">
+            <a href="pg01_display.html">Display</a>
+            <a href="pg02_text.html">Text</a>
+            <a href="pg03_animate.html">Animate</a>
+            <a href="pg04_object.html">Object</a>
+            <a href="pg05_collision.html">Collision</a>
+            <a href="pg06_sound.html">Sound</a>
+            <a class="active">Levels</a>
+          </div>
+        </div>
+        <a href="javascript:void(0);" class="icon" onclick="addDrop()">&#9776;</a>
+    </div>
+
+  <div class="page">
+    <article>
+      <h1>PyGame Basics</h1>
+      <h2>The Fun</h2>
+      <p>Now to make the game actually fun and challenging, we need to introduce some levelling up, or increased difficulty as we play.</p>
+      <p>There are multitude of ways to achieve this, feel free to experiment. Here, we can just speed up the ball by checking the score.</p>
+      <h2>Level up</h2>
+
+      <div class="flex-container">
+        <div class="box">
+          <p>First let's set score member function to keep track of the number of successful hits:</p>
+        </div>
+        <div class="boxes">
+          <code class="python">
+            <pre>class Game():
+    def __init__(self):
+        pygame.init() # initialise pygame libraries
+        self.size = WIDTH, HEIGHT
+        self.display = pygame.display.set_mode(self.size)
+        self.disp_surf = self.init_display()
+        self.running = True if self.disp_surf else False
+        self.font = pygame.font.Font(pygame.font.get_default_font(), 36)
+        self.ball = Ball()
+        self.hand = Hand()
+        self.allsprites = pygame.sprite.RenderPlain((self.ball, self.hand))
+        self.sound_hit = pygame.mixer.Sound("thump.wav")
+        self.sound_missed = pygame.mixer.Sound("swish.wav")
+<div class="diff">        self.score = 0</div></pre>
+          </code>
+        </div>
+      </div>
+
+      <div class="flex-container">
+        <div class="box">
+          <p>And increment the score with every successful hit:</p>
+        </div>
+        <div class="boxes">
+          <code class="python">
+            <pre>    def check_events(self):
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                self.running = False
+            elif event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
+                self.running = False
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                if self.hand.hit(self.ball):
+                    self.ball.hit()
+                    self.sound_hit.play()
+<div class="diff">                    self.score += 1
+                    if self.score % 10 == 0:
+                        self.ball.level_up()
+</div>                else:
+                    self.sound_missed.play()
+            elif event.type == pygame.MOUSEBUTTONUP:
+                self.hand.unhit()
+        return</pre>
+          </code>
+        </div>
+      </div>
+
+      <div class="flex-container">
+        <div class="box">
+          <p>And we add a level up function to our Ball object.</p>
+        </div>
+        <div class="boxes">
+          <code class="python">
+            <pre>class Ball(pygame.sprite.Sprite):
+    """Bounce a ball around the screen. It can spin when it is hit."""
+ . 
+ . 
+ . 
+<div class="diff">    def level_up(self):
+        self.speed = [2*x for x in self.speed]</div></pre>
+          </code>
+        </div>
+      </div>
+
+      <h2>Score</h2>
+
+      <div class="flex-container">
+        <div class="box">
+          <p>We should let the user know their score.</p>
+          <p>Let's edit out text:</p>
+        </div>
+        <div class="boxes">
+          <code class="python">
+            <pre>    def render(self):
+        '''Render surface'''
+        # background
+        self.disp_surf.fill(BLACK)
+        # draw text
+<div class="diff">        text = "Spin the Ball : %s" % self.score
+</div>        self.draw_text(text, GREEN, (int(WIDTH / 2), int(HEIGHT / 2)))
+        # Blit everything to screen
+        self.display.blit(self.disp_surf, (0,0))
+
+        # draw ball
+        self.allsprites.update()
+        self.allsprites.draw(self.display)
+
+        # update display
+        pygame.display.flip()
+        return</pre>
+          </code>
+        </div>
+      </div>
+
+      <p>And now we have a simple !! Do drop me a <a href="mailto:arynchoong@yahoo.com">note 📧</a> on the fun games you create,  I'd love to hear about them !!</p>
+    </article>
+  </div>
+  
+  <div class="navbar-bottom">
+      <a href="pg06_sound.html" class="nav-left">&#x2B05;</a>
+  </div>
+  <script src="assets/js/highlight.js"></script>
+  <script src="assets/js/script.js"></script>
+</body>
+<footer>
+    <p class="footer">Copyright © 2019 Aryn Choong. All Rights Reserved.</p>
+</footer>
+</html>
