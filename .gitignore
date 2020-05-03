@@ -1,3 +1,9 @@
-/design
+# virtual environment directories
 venv/
+
+# cache files
 *.pyc
+
+# misc files
+/design
+notes.md
